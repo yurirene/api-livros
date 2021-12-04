@@ -26,7 +26,7 @@ class LivroController extends Controller
     {
         try {
             if (empty($request->busca)) {
-                return $this->get();
+                return response()->json(['livros' => Livro::limit(20)->get(), 'botoes' => true], 200);                
             }
             $livros = Livro::where('nome', 'like', '%' . $request->busca .'%')
                 ->orWhere('autor', 'like', '%' . $request->busca .'%')
@@ -36,7 +36,7 @@ class LivroController extends Controller
             return response()->json(['livros' => $livros, 'botoes' => $botoes], 200);
 
         } catch (\Throwable $th) {
-            return response()->json([], 500);
+            return response()->json($th->getMessage(), 500);
         }
     }
 }
